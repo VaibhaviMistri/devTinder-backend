@@ -4,6 +4,7 @@ const { ConnectionRequest } = require('../models/connectionRequest');
 const { User } = require('../models/user');
 const requestRouter = express.Router();
 
+const sendEmail = require("../utils/sendEmail");
 
 requestRouter.post('/request/send/:status/:toUserId', userAuth, async (req, res) => {
     try {
@@ -32,7 +33,6 @@ requestRouter.post('/request/send/:status/:toUserId', userAuth, async (req, res)
             return res.status(400).send({ message: "Connection request already exist" });
         }
 
-
         const connectionRequest = new ConnectionRequest({
             fromUserId,
             toUserId,
@@ -40,6 +40,13 @@ requestRouter.post('/request/send/:status/:toUserId', userAuth, async (req, res)
         });
 
         const requestSent = await connectionRequest.save();
+
+        if (status === "interested") {
+            const emailRes = await sendEmail.run(
+                "Request sent",
+                `You have got new pending request from ${req.user.firstName}`
+            );
+        }
 
         res.json({
             message: `Status: ${status} from: ${req.user.firstName} to: ${toUser.firstName}`,

@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
         default: "https://geographyandyou.com/images/user-profile.png",
         validate(value) {
             if (!validator.isURL(value)) {
-                throw new Error("Invalid photo url: " + value);
+                throw new Error("Invalid photo url");
             }
         }
     },

@@ -58,7 +58,6 @@ userRouter.get("/user/feed", userAuth, async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         let limit = parseInt(req.query.limit) || 10;
         limit = limit > 50 ? 50 : limit;
-        const skip = (page - 1) * limit;
 
         const connectionRequests = await ConnectionRequest.find({
             $or: [
@@ -78,12 +77,28 @@ userRouter.get("/user/feed", userAuth, async (req, res) => {
                 { _id: { $nin: Array.from(hideUserFromFeed) } },
                 { _id: { $ne: loggedInUser._id } }
             ],
-        }).select(SAFE_USER_DATE).lean().skip(skip).limit(limit);
+        }).select(SAFE_USER_DATE).lean().limit(limit);
 
         res.json({ data: showInfeedUser });
 
     } catch (error) {
         res.status(400).send(`Error: ${error.message}`);
+    }
+});
+
+userRouter.get("/user/:targetUserId", userAuth, async (req, res) => {
+    try {
+        const { targetUserId } = req.params;
+
+        const oppositeUser = await User.findOne({
+            _id: targetUserId
+        }).select("firstName lastName photoUrl");
+
+        if (!oppositeUser) return res.status(404).json({ error: "User not found" });
+
+        res.json(oppositeUser);
+    } catch (error) {
+        res.status(500).send(`Error: ${error.message}`);
     }
 });
 
