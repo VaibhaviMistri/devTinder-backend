@@ -10,7 +10,7 @@ const initializeSocket = require("./utils/socket.js");
 require("./utils/cronjob.js");
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "http://13.49.238.35:5173",
     credentials: true
 }));
 app.use(express.json());
