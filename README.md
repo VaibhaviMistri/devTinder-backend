@@ -32,16 +32,21 @@ Backend API for **devTinder**, a developer matchmaking platform where developers
 ---
 
 ## 🏗 Project Structure (MVC Pattern)
-src/
+```bash
+devTinder-backend/
 │
-├── config/
-├── models/
-├── controllers/
-├── routers/
-├── middleware/
-├── utils/
-└── app.js
-
+├── src/
+│   ├── config/
+│   ├── middlewares/
+│   ├── models/
+│   ├── routes/
+│   └── utils/
+│
+├── app.js
+├── .env
+├── package.json
+└── README.md
+```
 
 ---
 
@@ -58,9 +63,9 @@ src/
 
 Create a `.env` file:
 
-PORT=port_no
-MONGO_URI=your_mongodb_connection
-JWT_SECRET=your_secret_key
+- PORT=port_no
+- MONGO_URI=your_mongodb_connection
+- JWT_SECRET=your_secret_key
 
 ---
 
